@@ -29,8 +29,8 @@ app.get('/api/new-route', (req, res) => {
   res.send('New Route');
 });
 
-app.use(cors(options));
 routerApi(app);
+app.use(cors(options));
 
 app.use(logErrors);
 app.use(boomErrorHandler);
