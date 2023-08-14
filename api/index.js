@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const whiteList = ['http://127.0.0.1:3000', "https://e-commerce-git-main-elkinrodriguez03.vercel.app"];
+const whiteList = ['http://127.0.0.1:3000', "https://e-commerce-git-main-elkinrodriguez03.vercel.app", "https://e-commerce-phi-seven.vercel.app/"];
 const options = {
   origin: (origin, callback) => {
     if (whiteList.includes(origin)) {
