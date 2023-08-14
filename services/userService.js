@@ -60,6 +60,17 @@ class UsersService {
     };
     return this.users[index];
   }
+
+  async delete(id) {
+    const index = this.users.findIndex(item => item.id === id);
+
+    if (index === -1) {
+      throw new Error('User not found');
+    }
+
+    this.users.splice(index, 1);
+    return { id };
+  }
 }
 
 module.exports = UsersService;

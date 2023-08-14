@@ -57,6 +57,13 @@ router.patch('/:id',
       next(error);
     }
   }
-)
+);
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const answer = await userService.delete(id);
+
+  res.json(answer);
+});
 
 module.exports = router;
