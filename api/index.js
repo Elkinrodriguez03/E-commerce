@@ -10,16 +10,16 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// const whiteList = ['http://127.0.0.1:3000', "https://e-commerce-git-main-elkinrodriguez03.vercel.app/"];
-// const options = {
-//   origin: (origin, callback) => {
-//     if (whiteList.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed'));
-//     }
-//   }
-// }
+const whiteList = ['http://127.0.0.1:3000', "https://e-commerce-git-main-elkinrodriguez03.vercel.app"];
+const options = {
+  origin: (origin, callback) => {
+    if (whiteList.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed'));
+    }
+  }
+}
 
 app.get('/api', (req, res) => {
   res.send('Server in express');
@@ -30,7 +30,7 @@ app.get('/api/new-route', (req, res) => {
 });
 
 routerApi(app);
-app.use(cors());
+app.use(cors(options));
 
 app.use(logErrors);
 app.use(boomErrorHandler);
