@@ -20,10 +20,19 @@ const userService = new UsersService();
 //   }
 // });
 
-router.get('/', async (req, res) => {
-  const users = await userService.find();
-  res.json(users);
-});
+// router.get('/', async (req, res) => {
+//   const users = await userService.find();
+//   res.json(users);
+// });
+
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await userService.find();
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+})
 
 router.get('/:id', async (req, res, next) => {
   try {
