@@ -1,40 +1,31 @@
-const { faker } = require('@faker-js/faker');
 const boom = require('@hapi/boom');
 
-const getConnection = require('../../libs/postgres')
+const { models } = require('../../libs/sequelize');
 
 class UsersService {
-  constructor() {
-    this.users = [];
-    this.generate();
-  }
+  constructor() {}
 
-  generate() {
-    const limit = 100
+  // generate() {
+  //   const limit = 100
 
-    for (let i = 0; i < limit; i++) {
-      this.users.push({
-        id: faker.string.uuid(),
-        username: faker.person.fullName(),
-        image: faker.image.url(),
-        isActive: faker.datatype.boolean(),
-      })
-    }
-  }
+  //   for (let i = 0; i < limit; i++) {
+  //     this.users.push({
+  //       id: faker.string.uuid(),
+  //       username: faker.person.fullName(),
+  //       image: faker.image.url(),
+  //       isActive: faker.datatype.boolean(),
+  //     })
+  //   }
+  // }
 
   async create(data) {
-    const newUser = {
-      id: faker.string.uuid(),
-      ...data
-    }
-    this.users.push(newUser);
+    const newUser = await models.User.create(data);
     return newUser;
   }
 
   async find() {
-    const client = await getConnection();
-    const rta = await client.query('SELECT * FROM task');
-    return rta.rows;
+    const rta = await models.User.findAll();
+    return rta;
   }
 
   // find() {
@@ -46,37 +37,22 @@ class UsersService {
   // }
 
   async findOne(id) {
-    const user = this.users.find(item => item.id === id);
+    const user = await models.User.findByPk(id);
     if (!user) {
-      throw boom.notFound('User not found');
-    }
-    if (!user.isActive) {
-      throw boom.conflict('User is block');
+      throw boom.notFound('user not found');
     }
     return user;
   }
 
   async update(id, changes) {
-    const index = this.users.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('User not found');
-    }
-    const user = this.users[index];
-    this.users[index] = {
-      ...user,
-      ...changes
-    };
-    return this.users[index];
+    const user = await this.findOne(id);
+    const rta = await user.update(changes);
+    return rta;
   }
 
   async delete(id) {
-    const index = this.users.findIndex(item => item.id === id);
-
-    if (index === -1) {
-      throw new Error('User not found');
-    }
-
-    this.users.splice(index, 1);
+    const user = await this.findOne(id);
+    await user.destroy();
     return { id };
   }
 }
