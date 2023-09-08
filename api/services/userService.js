@@ -18,14 +18,16 @@ class UsersService {
   //   }
   // }
 
+  async find() {
+    const rta = await models.User.findAll({
+      include: ['customer']
+    });
+    return rta;
+  }
+
   async create(data) {
     const newUser = await models.User.create(data);
     return newUser;
-  }
-
-  async find() {
-    const rta = await models.User.findAll();
-    return rta;
   }
 
   // find() {
@@ -39,7 +41,7 @@ class UsersService {
   async findOne(id) {
     const user = await models.User.findByPk(id);
     if (!user) {
-      throw boom.notFound('user not found');
+      throw boom.notFound('User not found');
     }
     return user;
   }
